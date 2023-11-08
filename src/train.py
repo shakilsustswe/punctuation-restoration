@@ -39,7 +39,8 @@ if os.path.exists('path_to_your_checkpoint.pth'):
     deep_punctuation.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     start_epoch = checkpoint['epoch'] + 1  # Resume from the next epoch
-
+else:
+    start_epoch = 0
 # Datasets
 if args.language == 'english':
     train_set = Dataset(os.path.join(args.data_path, 'en/train2012'), tokenizer=tokenizer, sequence_len=sequence_len,
