@@ -33,6 +33,13 @@ ar = args.augment_rate
 sequence_len = args.sequence_length
 aug_type = args.augment_type
 
+# Check if there's a checkpoint to resume from
+if os.path.exists('path_to_your_checkpoint.pth'):
+    checkpoint = torch.load('path_to_your_checkpoint.pth')
+    deep_punctuation.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    start_epoch = checkpoint['epoch'] + 1  # Resume from the next epoch
+
 # Datasets
 if args.language == 'english':
     train_set = Dataset(os.path.join(args.data_path, 'en/train2012'), tokenizer=tokenizer, sequence_len=sequence_len,
@@ -193,7 +200,7 @@ def train():
     with open(log_path, 'a') as f:
         f.write(str(args)+'\n')
     best_val_acc = 0
-    for epoch in range(args.epoch):
+    for epoch in range(start_epoch, args.epoch):
         train_loss = 0.0
         train_iteration = 0
         correct = 0
