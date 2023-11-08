@@ -12,6 +12,8 @@ from model import DeepPunctuation, DeepPunctuationCRF
 from config import *
 import augmentation
 
+
+torch.cuda.empty_cache()
 torch.multiprocessing.set_sharing_strategy('file_system')   # https://github.com/pytorch/pytorch/issues/11201
 
 args = parse_arguments()
