@@ -65,10 +65,10 @@ def test(data_loader):
     num_iteration = 0
     deep_punctuation.eval()
     # +1 for overall result
-    tp = np.zeros(1+len(punctuation_dict), dtype=np.int)
-    fp = np.zeros(1+len(punctuation_dict), dtype=np.int)
-    fn = np.zeros(1+len(punctuation_dict), dtype=np.int)
-    cm = np.zeros((len(punctuation_dict), len(punctuation_dict)), dtype=np.int)
+    tp = np.zeros(1+len(punctuation_dict), dtype=int)
+    fp = np.zeros(1+len(punctuation_dict), dtype=int)
+    fn = np.zeros(1+len(punctuation_dict), dtype=int)
+    cm = np.zeros((len(punctuation_dict), len(punctuation_dict)), dtype=int)
     correct = 0
     total = 0
     with torch.no_grad():
@@ -105,10 +105,9 @@ def test(data_loader):
     tp[-1] = np.sum(tp[1:])
     fp[-1] = np.sum(fp[1:])
     fn[-1] = np.sum(fn[1:])
-    precision = tp/(tp+fp)
-    recall = tp/(tp+fn)
+    precision = np.divide(tp.astype(float), tp.astype(float) + fp.astype(float), out=np.zeros_like(tp).astype(float), where=(tp + fp) != 0, dtype=float)
+    recall = np.divide(tp.astype(float), tp.astype(float) + fn.astype(float), out=np.zeros_like(tp).astype(float), where=(tp + fn) != 0, dtype=float)
     f1 = 2 * precision * recall / (precision + recall)
-
     return precision, recall, f1, correct/total, cm
 
 
