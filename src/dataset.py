@@ -5,21 +5,22 @@ import numpy as np
 
 
 def parse_data(file_path, tokenizer, sequence_len, token_style):
-    """
-
-    :param file_path: text file path that contains tokens and punctuations separated by tab in lines
-    :param tokenizer: tokenizer that will be used to further tokenize word for BERT like models
-    :param sequence_len: maximum length of each sequence
-    :param token_style: For getting index of special tokens in config.TOKEN_IDX
-    :return: list of [tokens_index, punctuation_index, attention_masks, punctuation_mask], each having sequence_len
-    punctuation_mask is used to ignore special indices like padding and intermediate sub-word token during evaluation
-    """
+  
     data_items = []
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = [line for line in f.read().split('\n') if line.strip()]
         idx = 0
         # loop until end of the entire text
         while idx < len(lines):
+            try:
+                word, punc = lines[idx].split('\t')
+            except ValueError:
+                print(f"Error parsing line {idx + 1}: {lines[idx]}")
+                # Skip the current line and move to the next one
+                idx += 1
+                continue
+
+
             x = [TOKEN_IDX[token_style]['START_SEQ']]
             y = [0]
             y_mask = [1]  # which positions we need to consider while evaluating i.e., ignore pad or sub tokens
@@ -54,6 +55,7 @@ def parse_data(file_path, tokenizer, sequence_len, token_style):
                 y_mask = y_mask + [0 for _ in range(sequence_len - len(y_mask))]
             attn_mask = [1 if token != TOKEN_IDX[token_style]['PAD'] else 0 for token in x]
             data_items.append([x, y, attn_mask, y_mask])
+            idx += 1
     return data_items
 
 
