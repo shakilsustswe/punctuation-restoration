@@ -38,7 +38,8 @@ deep_punctuation.to(device)
 
 
 def inference():
-    deep_punctuation.load_state_dict(torch.load(model_save_path))
+    #deep_punctuation.load_state_dict(torch.load(model_save_path))
+    deep_punctuation.load_state_dict(torch.load(model_save_path, map_location=torch.device('cpu')))
     deep_punctuation.eval()
 
     with open(args.in_file, 'r', encoding='utf-8') as f:
