@@ -114,8 +114,8 @@ def test(data_loader):
 
 def run():
     # deep_punctuation.load_state_dict(torch.load(model_save_path))
-  device = torch.device('cuda' if (args.cuda and torch.cuda.is_available()) else 'cpu')
-  deep_punctuation.load_state_dict(torch.load(model_save_path, map_location=device))
+    device = torch.device('cuda' if (args.cuda and torch.cuda.is_available()) else 'cpu')
+    deep_punctuation.load_state_dict(torch.load(model_save_path, map_location=device))
 
     for i in range(len(test_loaders)):
         precision, recall, f1, accuracy, cm = test(test_loaders[i])
