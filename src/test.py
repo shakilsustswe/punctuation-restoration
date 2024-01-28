@@ -50,6 +50,7 @@ model_save_path = args.weight_path
 log_path = os.path.join(args.save_path, 'logs_test.txt')
 
 # Model
+# device = torch.device('cuda' if (args.cuda and torch.cuda.is_available()) else 'cpu')
 device = torch.device('cuda' if (args.cuda and torch.cuda.is_available()) else 'cpu')
 if args.use_crf:
     deep_punctuation = DeepPunctuationCRF(args.pretrained_model, freeze_bert=False, lstm_dim=args.lstm_dim)
@@ -112,7 +113,10 @@ def test(data_loader):
 
 
 def run():
-    deep_punctuation.load_state_dict(torch.load(model_save_path))
+    # deep_punctuation.load_state_dict(torch.load(model_save_path))
+  device = torch.device('cuda' if (args.cuda and torch.cuda.is_available()) else 'cpu')
+  deep_punctuation.load_state_dict(torch.load(model_save_path, map_location=device))
+
     for i in range(len(test_loaders)):
         precision, recall, f1, accuracy, cm = test(test_loaders[i])
         log = test_files[i] + '\n' + 'Precision: ' + str(precision) + '\n' + 'Recall: ' + str(recall) + '\n' + \
