@@ -21,7 +21,7 @@ parser.add_argument('--weight-path', default='out/weights.pt', type=str, help='m
 parser.add_argument('--sequence-length', default=256, type=int,
                     help='sequence length to use when preparing dataset (default 256)')
 parser.add_argument('--batch-size', default=8, type=int, help='batch size (default: 8)')
-parser.add_argument('--save-path', default='out_test/', type=str, help='model and log save directory')
+parser.add_argument('--save-path', default='out/', type=str, help='model and log save directory')
 
 args = parser.parse_args()
 
